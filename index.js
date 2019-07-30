@@ -1,4 +1,16 @@
-// game part
+// Author: CG, ALL RIGHTS RESERVERED
+// share to anyone should indicate the source, and  of course my name!
+// 作者： CG 保留所有权利
+// 转载请注明出处！
+
+console.warn(
+    `
+    // Author: CG, ALL RIGHTS RESERVERED
+    // share to anyone should indicate the source, and of course my name!
+    // 作者： CG 保留所有权利
+    // 转载请注明出处！
+    `
+);
 
 // Tetromino's orientation, four type totally
 // 0 degree, 90 degree 180 degree and 270 degree
@@ -136,23 +148,25 @@ class Shape {
      */
     constructor(game, center, shape, orientation){
         if (game === undefined || center === undefined || shape === undefined) throw "wrong argument";
+
         if (orientation === undefined || orientation === null) {
             if(shape === SHAPE.I) {
-                orientation = Math.floor(Math.random() * O_I.D1);
+                orientation = game.random(O_I.D0, O_I.D1)
             }
             else if(shape === SHAPE.S || shape === SHAPE.Z) {
-                orientation = Math.floor(Math.random() * O_Z_S.D1);
+                orientation = game.random(O_Z_S.D0, O_Z_S.D1);
             }
             else if(shape === SHAPE.L || shape === SHAPE.J) {
-                orientation = Math.floor(Math.random() * O_J_L.D3);
+                orientation = game.random(O_J_L.D0, O_J_L.D3);
             }
             else if(shape === SHAPE.W) {
-                orientation = Math.floor(Math.random() * O_W.D3);
+                orientation = game.random(O_W.D0, O_W.D3);
             }
             else if(shape ===SHAPE.O) {
                 orientation = O_O.D0;
             }
         }
+        
         this.game = game;
         this.center             = center;
         this.shape              = shape;
@@ -636,6 +650,17 @@ class Game {
         else return false;
     }
 
+    
+    /**
+     * generate a number in [a, b] closed interval
+     * 生成随机数 [a, b] 闭区间
+     * @param {*} a smallest, greater than -10000
+     * @param {*} b  biggest, less than 10000
+     */
+    random(a, b) {
+        return (Math.floor(Math.random() * 10000) % (b - a + 1)) + a;
+    }
+
     // reset game data
     // 重置游戏数据
     reset() {
@@ -669,11 +694,11 @@ class Game {
                     for(let x = 1; x <= 10; x++) {
                         let flag = false;
                         for (let cur of this.cur.data) {
-                            if(cur.x===x && (cur.y === y || cur.y-1 === y))
+                            if(cur.x===x && (cur.y === y || cur.y + 1 === y))
                                 flag = true;
                         }
                         if(flag) break;
-                        console.log(x, y, this.get(x, y - 1), this.cur.data)
+                        // console.log(x, y, this.get(x, y - 1), this.cur.data)
                         this.set(x, y, false);
                         this.set(x, y, this.get(x, y - 1));
                     }
@@ -697,7 +722,7 @@ class Game {
             }
             // random shape type
             // 随机形状
-            let shape = Math.floor(Math.random() * SHAPE.I);
+            let shape = this.random(SHAPE.Z, SHAPE.I);
             this.cur = new Shape(this, new Position(5, 1), shape, null);
             // display this new-born shape
             this.cur.write();
