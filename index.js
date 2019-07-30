@@ -628,6 +628,11 @@ class Game {
         // timeout index
         this.thresholdTimeout = null;
 
+        this.isTouched      = false;
+        this.touchFrom      = null;
+        this.touchTo        = null;
+        this.touchMovement  = null;
+
         // a bunch of input handle
         // 一堆输入操作
         window.addEventListener("keydown", event => {
@@ -648,7 +653,52 @@ class Game {
                     this.thresholdTimeout = null
                 }, this.threshold);
             }
-          });
+        });
+        // add touch support
+        // 添加触摸控制
+        window.addEventListener("touchstart", event => {
+            if(!this.isTouched){
+                this.touchFrom = event.changedTouches[0];
+                this.touchMovement = 0;
+                this.isTouched = true;
+            }
+        });
+        window.addEventListener("touchcancel", event => {
+            this.isTouched = false;
+            this.touchFrom = this.touchTo  = this.touchMovement = null;
+        });
+        window.addEventListener("touchmove", event => {
+            if(this.isTouched && this.touchMovement !== null) {
+                this.touchMovement ++;
+                this.touchTo = event.changedTouches[0];
+                if (this.touchMovement % 10 === 0) {
+                    const dx = this.touchTo.clientX - this.touchFrom.clientX;
+                    if(dx > 0) {
+                        this.cur.moveRight();
+                    }
+                    else if(dx < 0) {
+                        this.cur.moveLeft();
+                    }
+                }
+            }
+        });
+        window.addEventListener("touchend", event => {
+            if(this.isTouched) {
+                this.touchTo = event.changedTouches[0];
+                console.log(this.touchFrom, this.touchTo);
+                const dx = this.touchTo.clientX - this.touchFrom.clientX,
+                      dy = this.touchTo.clientY - this.touchFrom.clientY;
+                if(dy > 50) {
+                    this.cur.drop();
+                }
+                else if(dy < -50) {
+                    this.cur.changeOrientation();
+                }
+                this.touchFrom = this.touchTo = this.touchMovement = null;
+                this.isTouched = false;
+            }
+        });
+                
     }
 
     // get game data in specific position
