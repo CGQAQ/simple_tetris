@@ -685,7 +685,7 @@ class Game {
         window.addEventListener("touchend", event => {
             if(this.isTouched) {
                 this.touchTo = event.changedTouches[0];
-                console.log(this.touchFrom, this.touchTo);
+                // console.log(this.touchFrom, this.touchTo);
                 const dx = this.touchTo.clientX - this.touchFrom.clientX,
                       dy = this.touchTo.clientY - this.touchFrom.clientY;
                 if(dy > 50) {
