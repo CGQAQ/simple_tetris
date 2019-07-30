@@ -10,11 +10,14 @@
         body {
             display: flex;
             justify-content: center;
-            height: calc(100vh - 1px);
-            width : 100vw;
-            margin: 0;
-            padding: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 1px;
+            overflow: auto;
             -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
         #div {
             /* transform: scale(1, 1.5); */
