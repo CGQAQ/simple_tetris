@@ -342,7 +342,7 @@ class Shape {
             case SHAPE.Z:
                 if(this.orientation === O_Z_S.D0) {         // . -`    center is 1st of 2 in the middle
                     return [
-                        this.center.get_new_xy(1, 1),    
+                        this.center.get_new_xy(1, -1),    
                         this.center.clone(),                       
                         this.center.get_new_x(1),
                         this.center.get_new_y(1),
